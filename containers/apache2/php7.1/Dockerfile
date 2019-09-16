@@ -4,28 +4,20 @@ RUN apt-get update && apt-get -y upgrade
 ENV DEBIAN_FRONTEND noninteractive
 # ?? lynx-cur rsyslog php-pear ssmtp
 # ?? not found php7.2-mcrypt
-RUN apt-get -y install apt-transport-https wget gnupg curl zip unzip cron mc vim
+RUN apt-get -y install apt-transport-https wget gnupg curl zip unzip ssmtp cron
 
 RUN wget -O sury.gpg https://packages.sury.org/php/apt.gpg && apt-key add sury.gpg && rm sury.gpg
 RUN echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/sources.list.d/php.list
 
 RUN apt-get update && apt-get -y install \
     apache2 \
-    libapache2-mod-php7.2 \
-    php7.2-curl \
-    php7.2-memcached \
-    php7.2-memcache \
-    php7.2-mbstring \
-    php7.2-mysql \
-    php7.2-xdebug \
-    php7.2-soap \
-    php7.2-gd \
-    php7.2-imagick \
-    php7.2-intl \
-    php7.2-ldap \
-    php7.2-opcache \
-    php7.2-zip \
-    php7.2-xml
+    libapache2-mod-php7.1 \
+    php7.1-curl \
+    php7.1-mbstring \
+    php7.1-mysql \
+    php7.1-xdebug \
+    php7.1-opcache \
+    php7.1-xml
 
 ENV APACHE_RUN_USER=www-data \
     APACHE_RUN_GROUP=www-data \
@@ -36,7 +28,7 @@ ENV APACHE_RUN_USER=www-data \
 
 COPY ./rootfs /
 
-RUN a2enmod remoteip && a2enconf remoteip && a2enmod php7.2 && a2enmod rewrite 
+RUN a2enmod remoteip && a2enconf remoteip && a2enmod php7.1 && a2enmod rewrite 
 
 RUN usermod -u 1000 www-data
 

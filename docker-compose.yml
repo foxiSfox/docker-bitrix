@@ -3,7 +3,7 @@ version: "3.0"
 services:
 
   app:
-    build: ./containers/${WEBSERVER}
+    build: ./containers/${WEBSERVER}/php${PHP}
     environment:
       - LOG_LEVEL=${APP_LOG_LEVEL}
     volumes:

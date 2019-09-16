@@ -8,19 +8,10 @@ RUN apt-get -y install \
     apache2 libapache2-mod-php7.0 \
     php-pear \
     php7.0-curl \
-    php7.0-memcached \
-    php7.0-memcache \
     php7.0-mbstring \
     php7.0-mysql \
-    php7.0-intl \
-    php7.0-ldap \
     php7.0-xdebug \
-    php7.0-soap \
-    php7.0-gd \
-    php7.0-imagick \
-    php7.0-mcrypt \
     php7.0-opcache \
-    php7.0-zip \
     php7.0-xml
 
 ENV APACHE_RUN_USER=www-data \
