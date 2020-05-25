@@ -13,8 +13,7 @@ mailhub=mail:1025
 #rewriteDomain=
 
 # The full hostname
-#hostname=arealidea.ru
-hostname=helbprom.ru
+hostname=arealidea.ru
 
 # Are users allowed to set their own From: address?
 # YES - Allow the user to specify their own From: address

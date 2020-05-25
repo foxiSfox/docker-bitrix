@@ -15,7 +15,10 @@ make up
 2. Отредактируйте переменные в `Makefile` 
     - `MYSQL_DUMP`: путь до sql файла
     - `RSYNC_ROOT`: путь до корневой директории production
-4. Запустить команду
+    - `BACKUP_NAME`: название файла бэкапа
+    - `MYSQL_DUMP`: путь до бэкапа mysql
+    - `RSYNC_ROOT`: путь до корневой директории проекта
+3. Запустить команду
 ```bash
 make init
 ```
@@ -36,7 +39,7 @@ make up
 make down
 ```
 
-- Восстановление БД
+- Дополнительная информация по командам
 ```bash
-make restore-mysql
+make help
 ```

@@ -6,9 +6,6 @@
 include .env
 export
 
-MYSQL_DUMP := bitrix@192.168.0.219:/home/bitrix/db.sql
-RSYNC_ROOT := bitrix@192.168.0.219:/home/bitrix/www/
-
 MYSQL_CONTAINER_NAME := $(shell docker ps --filter name=mysql --format {{.Names}})
 
 SHELL = /bin/sh
@@ -26,16 +23,16 @@ help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo "\n  Allowed for overriding next properties:\n\n\
 		Usage example:\n\
-	    	make up"
+			make up"
 
 # --- [ Application ] -------------------------------------------------------------------------------------------------
 
-init: rsync restore-first app-composer-install ## init project
+init: up rsync restore-first app-composer-install ## init project
 
 rsync: ## rsync bitrix folder
-	@echo "Starting download database dump"
-	rsync -avz --exclude 'bitrix/backup/' --exclude 'bitrix/*cache/' $(RSYNC_ROOT)/bitrix ./src/app/
-	rsync -av --exclude 'upload/disk/' $(RSYNC_ROOT)/upload ./src/app/
+	@echo "Starting rcync"
+	#rsync -avz --exclude 'bitrix/backup/' --exclude 'bitrix/*cache/' $(RSYNC_ROOT)/bitrix ./src/app/
+	rsync -av --exclude 'upload/disk/' --exclude 'upload/*cache/' $(RSYNC_ROOT)/upload ./src/app/
 
 # --- [ MySQL ] -------------------------------------------------------------------------------------------------
 
@@ -43,20 +40,20 @@ restore-first: download-dump create-database restore-mysql ## dowload dump and r
 
 download-dump:  ## restore mysql database
 	@echo "Starting download database dump"
-	scp $(MYSQL_DUMP) ./data/backup/db.sql
+	scp $(MYSQL_DUMP) ./data/backup/${BACKUP_NAME}.sql
 
 create-database:
-	docker exec -it $(MYSQL_CONTAINER_NAME) sh -c "echo 'CREATE DATABASE db CHARACTER SET utf8 COLLATE utf8_unicode_ci;' | mysql -u root -p$(MYSQL_ROOT_PASSWORD)"
+	docker exec -it $(MYSQL_CONTAINER_NAME) sh -c "echo 'CREATE DATABASE $(MYSQL_DATABASE) CHARACTER SET utf8 COLLATE utf8_unicode_ci;' | mysql -u root -p$(MYSQL_ROOT_PASSWORD)"
 
 restore-mysql:  ## restore mysql database
 	@echo "Starting restore MySQL database"
-	docker exec -it $(MYSQL_CONTAINER_NAME) sh -c "mysql -u root -p$(MYSQL_ROOT_PASSWORD) db < /backup/$(BACKUP_NAME).sql"
+	docker exec -it $(MYSQL_CONTAINER_NAME) sh -c "mysql -u root -p$(MYSQL_ROOT_PASSWORD) $(MYSQL_DATABASE) < /backup/$(BACKUP_NAME).sql"
 
 backup-mysql:  ## backup mysql database
 	@echo "Starting backup MySQL database"
 	docker exec -it $(MYSQL_CONTAINER_NAME) sh -c "mkdir -p /backup/$(CURRENT_TIME)" \
 		&& docker exec -it $(MYSQL_CONTAINER_NAME) \
-			sh -c "mysqldump -u root -p$(MYSQL_ROOT_PASSWORD) db > /backup/$(CURRENT_TIME)/$(BACKUP_NAME).sql"
+			sh -c "mysqldump -u root -p$(MYSQL_ROOT_PASSWORD) $(MYSQL_DATABASE) > /backup/$(CURRENT_TIME)/$(BACKUP_NAME).sql"
 
 # --- [ Docker ] -------------------------------------------------------------------------------------------------
 
@@ -79,15 +76,3 @@ app-composer-install: ## front composer install
 
 app-composer: ## front composer update
 	@cd ./src/app && composer update
-
-# --- [ Documentation ] -------------------------------------------------------------------------------------------------
-
-build-doc: ## build doc
-	@cd ./doc && npm i npm audit fix --force && vuepress build src
-
-doc-export: ## export doc to single docx file
-	@cd ./doc && $(docker_compose_bin) run --rm foliant make docx
-
-dev-doc: ## dev doc
-	vuepress dev ./doc/src
-

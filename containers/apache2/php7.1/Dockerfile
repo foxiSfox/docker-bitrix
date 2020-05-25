@@ -2,8 +2,6 @@ FROM debian:stretch-slim
 RUN apt-get update && apt-get -y upgrade
 
 ENV DEBIAN_FRONTEND noninteractive
-# ?? lynx-cur rsyslog php-pear ssmtp
-# ?? not found php7.2-mcrypt
 RUN apt-get -y install apt-transport-https wget gnupg curl zip unzip ssmtp cron
 
 RUN wget -O sury.gpg https://packages.sury.org/php/apt.gpg && apt-key add sury.gpg && rm sury.gpg
@@ -17,7 +15,8 @@ RUN apt-get update && apt-get -y install \
     php7.1-mysql \
     php7.1-xdebug \
     php7.1-opcache \
-    php7.1-xml
+    php7.1-xml \
+    php7.1-gd
 
 ENV APACHE_RUN_USER=www-data \
     APACHE_RUN_GROUP=www-data \
