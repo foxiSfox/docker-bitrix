@@ -2,9 +2,9 @@ FROM debian:stretch-slim
 RUN apt-get update && apt-get -y upgrade
 
 ENV DEBIAN_FRONTEND noninteractive
-# ?? lynx-cur rsyslog php-pear ssmtp
+# ?? lynx-cur rsyslog php-pear
 # ?? not found php7.2-mcrypt
-RUN apt-get -y install apt-transport-https wget gnupg curl zip unzip cron mc vim
+RUN apt-get -y install apt-transport-https wget gnupg curl zip unzip cron mc vim ssmtp
 
 RUN wget -O sury.gpg https://packages.sury.org/php/apt.gpg && apt-key add sury.gpg && rm sury.gpg
 RUN echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/sources.list.d/php.list
