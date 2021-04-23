@@ -1,4 +1,4 @@
-FROM debian:stretch-slim
+FROM debian:stretch-20210408-slim
 RUN apt-get update && apt-get -y upgrade
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -23,11 +23,11 @@ ENV APACHE_RUN_USER=www-data \
     APACHE_LOG_DIR=/var/log/apache2 \
     APACHE_LOCK_DIR=/var/lock/apache2 \
     APACHE_RUN_DIR=/var/run/apache2 \
-    APACHE_PID_FILE=/var/run/apache2.pid 
+    APACHE_PID_FILE=/var/run/apache2.pid
 
 COPY ./rootfs /
 
-RUN a2enmod remoteip && a2enconf remoteip && a2enmod php7.1 && a2enmod rewrite 
+RUN a2enmod remoteip && a2enconf remoteip && a2enmod php7.1 && a2enmod rewrite
 
 RUN usermod -u 1000 www-data
 

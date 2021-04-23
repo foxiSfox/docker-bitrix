@@ -1,4 +1,4 @@
-FROM debian:stretch-slim
+FROM debian:stretch-20210408-slim
 RUN apt-get update && apt-get -y upgrade
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -17,7 +17,8 @@ RUN apt-get update && apt-get -y install \
     php7.2-mysql \
     php7.2-xdebug \
     php7.2-opcache \
-    php7.2-xml
+    php7.2-xml \
+    php7.2-gd
 
 ENV APACHE_RUN_USER=www-data \
     APACHE_RUN_GROUP=www-data \
