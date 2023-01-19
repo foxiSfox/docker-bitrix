@@ -1,11 +1,11 @@
-FROM debian:stretch-20210408-slim
+FROM debian:bullseye-20221024-slim
 RUN apt-get update && apt-get -y upgrade
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get -y install apt-transport-https wget gnupg curl zip unzip ssmtp cron
 
 RUN wget -O sury.gpg https://packages.sury.org/php/apt.gpg && apt-key add sury.gpg && rm sury.gpg
-RUN echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/sources.list.d/php.list
+RUN echo "deb https://packages.sury.org/php/ bullseye main" | tee /etc/apt/sources.list.d/php.list
 
 RUN apt-get update && apt-get -y install \
     apache2 \
