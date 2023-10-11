@@ -1,10 +1,8 @@
-FROM nginx:1.14
-
-LABEL maintainer="Andrew Kopylov <aa74ko@gmail.com>"
+FROM nginx:1.25.2
 
 RUN apt-get update \
   && apt-get install --no-install-recommends --no-install-suggests -y \
-  curl netcat
+  curl
 
 COPY ./rootfs /
 

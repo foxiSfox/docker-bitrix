@@ -1,7 +1,6 @@
 version: "3.0"
 
 services:
-
   app:
     build: ./containers/${WEBSERVER}/php${PHP}
     environment:
@@ -20,26 +19,18 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - 3306:3306
+      - "127.0.0.1:3306:3306"
     volumes:
       - ./logs/mysql:/var/log/mysql
       - ./data/mysql:/var/lib/mysql
       - ./data/backup:/backup
     restart: always
 
-  adminer:
-    image: adminer
-    environment:
-      ADMINER_DEFAULT_SERVER: mysql
-    restart: always
-    ports:
-      - 5000:8080
-
   nginx:
     build: ./containers/nginx
     ports:
-      - 80:80
-      - 443:443
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
     volumes:
       - ./logs/nginx/:/var/log/nginx
       - ./src/app:/var/www/html
